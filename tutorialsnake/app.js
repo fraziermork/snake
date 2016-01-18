@@ -5,7 +5,7 @@ var snakeCtx = snakeCanvas.getContext('2d');
 game = {
   score: 0,
   fps: 8,
-  over: false,
+  over: true,
   message: null,
 
   start: function(){
@@ -153,7 +153,6 @@ inverseDirection = {
   'left': 'right',
   'right' : 'left',
   'down': 'up'
-
 }
 
 keys = {
@@ -182,7 +181,7 @@ addEventListener('keydown', function (e){
     }
 }, false );
 
-var requestAnimationFrame = window.requestAnimationFrame ;
+var requestAnimationFrame = window.requestAnimationFrame;
 
 function loop() {
   if (game.over == false){
