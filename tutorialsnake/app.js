@@ -24,7 +24,7 @@ game = {
   },
 
   drawBox: function(x, y, size, color){
-    snakeCtx.fillstyle = color; //black
+    snakeCtx.fillstyle = color;
     snakeCtx.beginPath();
     snakeCtx.moveTo(x - size/2, y - size/2);
     snakeCtx.lineTo(x + size/2, y - size/2);
@@ -35,7 +35,7 @@ game = {
   },
 
   drawScore: function(){
-    snakeCtx.fillstyle = '#999';
+    snakeCtx.fillStyle = '#999';
     snakeCtx.font = (snakeCanvas.height) + 'px Impact, sans-serif';
     snakeCtx.textAlign = 'center';
     snakeCtx.fillText(game.score, snakeCanvas.width/2, snakeCanvas.height * 0.9);
@@ -43,7 +43,7 @@ game = {
 
   drawMessage: function(){
     if (game.message !== null){
-      snakeCtx.fillstyle = '#00F';
+      snakeCtx.fillStyle = '#00F';
       snakeCtx.strokeStyle = '#FFF';
       snakeCtx.font = (snakeCanvas.height/10) + 'px Impact';
       snakeCtx.textAlign = 'center';
@@ -63,7 +63,7 @@ snake = {
   y: null,
   color: '#0F0',
   direction: 'left',
-  sections:[],
+  sections: [],
 
   init: function(){
     snake.sections = [];
@@ -96,7 +96,7 @@ snake = {
   },
 
   draw: function() {
-    for(i=0; i < snake.sections.length; i++){
+    for(i = 0; i < snake.sections.length; i++){
       snake.drawSection(snake.sections[i].split(','));
     }
   },
