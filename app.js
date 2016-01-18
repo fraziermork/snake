@@ -1,12 +1,19 @@
 var snakeCanvas = document.getElementById('snake');
 var context = snakeCanvas.getContext('2d');
 
+function isInArray (value, array){
+  for (var i = 0; i < array.length; i++){
+    if (value.toString() === array[i].toString()){
+      return true;
+    }
+  }
+  return false;
+}
 
 game = {
   over: true,
   fps: 6,
   score: 0,
-  color: '#000000',
   pixelSize: snakeCanvas.height/40,
   drawBox: function(xPos, yPos){
     context.beginPath();
@@ -76,8 +83,9 @@ snake = {
   },
 
   checkCollision: function(){
+    console.log('isInArray ' + isInArray([snake.x, snake.y], snake.sections));
     if (snake.x > snakeCanvas.width|| snake.y > snakeCanvas.height ||
-    snake.x < game.pixelSize || snake.y < game.pixelSize || snake.sections.indexOf([snake.x, snake.y]) >= 0) {
+    snake.x < game.pixelSize || snake.y < game.pixelSize) {
       game.over = true;
     }
   },
