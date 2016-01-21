@@ -54,7 +54,8 @@ snake = {
       snake.x = (snakeCanvas.height/2) + (game.pixelSize/2) + (game.pixelSize*i);
       snake.sections.push([snake.x, snake.y]);
     }
-    console.log(snake.sections);
+    console.log('Init sections are:');
+    console.dir(snake.sections);
   },
   move: function(){
     switch(snake.direction){
@@ -73,7 +74,9 @@ snake = {
     }
     snake.checkCollision();
     snake.checkGrowth();
-    snake.sections.push([snake.x, snake.y])
+    snake.sections.push([snake.x, snake.y]);
+    console.log('Move snake sections are:' );
+    console.dir(snake.sections);
   },
 
   draw: function(){
