@@ -10,11 +10,13 @@ function isInArray (value, array){
   return false;
 }
 
-game = {
+var game = {
   over: true,
   fps: 6,
   score: 0,
+  directionFlag: false,
   pixelSize: snakeCanvas.height/40,
+
   drawBox: function(xPos, yPos){
     context.beginPath();
     context.fillStyle = game.color;
@@ -25,6 +27,7 @@ game = {
     context.closePath();
     context.fill();
   },
+
   start: function(){
     //set initial flag values
     game.resetCanvas();
@@ -33,30 +36,46 @@ game = {
     snake.init();
     game.over = false;
   },
-  resetCanvas() {
+
+  resetCanvas: function() {
     context.clearRect(0,0, snakeCanvas.height, snakeCanvas.width);
   },
+
   stop: function() {
     game.over = true;
-  },
+  }
 }
 
-snake = {
-  sections : [],
+var snake = {
+  sections: [],
   x: null,
   y: null,
   direction: 'left',
 
   init: function(){
     snake.sections = [];
+    console.table(snake.sections);
+    console.log((snake.sections).toString());
     snake.y = (snakeCanvas.height/2) +(game.pixelSize/2);
+    console.log(snake.y);
+    snake.x = (snakeCanvas.width/2) - (game.pixelSize/2);
+    console.log(snake.x);
     for (var i = 0; i < 5; i++){
-      snake.x = (snakeCanvas.height/2) + (game.pixelSize/2) + (game.pixelSize*i);
+      snake.x += (game.pixelSize);
+      console.log('in init snake x');
+      console.log(snake.x);
       snake.sections.push([snake.x, snake.y]);
+      console.table(snake.sections);
+      console.dir(snake.sections);
+      console.log(snake.sections);
+      console.log(snake.sections.toString());
+      console.log(snake.sections.length);
     }
     console.log('Init sections are:');
-    console.dir(snake.sections);
+    console.table(snake.sections);
+    console.log(snake.sections);
   },
+
   move: function(){
     switch(snake.direction){
       case 'up':
@@ -72,21 +91,24 @@ snake = {
         snake.x += game.pixelSize;
         break;
     }
+    // console.log(snake.x + ' ' + snake.y);
     snake.checkCollision();
     snake.checkGrowth();
     snake.sections.push([snake.x, snake.y]);
-    console.log('Move snake sections are:' );
-    console.dir(snake.sections);
+    // console.log('Move snake sections are:' );
+    // console.log(snake.sections);
   },
 
   draw: function(){
     for (var i = 0; i < snake.sections.length; i++){
+      // console.log('Draw snake sections are');
+      // console.log(snake.sections);
       game.drawBox(snake.sections[i][0], snake.sections[i][1])
     }
   },
 
   checkCollision: function(){
-    console.log('isInArray ' + isInArray([snake.x, snake.y], snake.sections));
+    // console.log('isInArray ' + isInArray([snake.x, snake.y], snake.sections));
     if (snake.x > snakeCanvas.width|| snake.y > snakeCanvas.height ||
     snake.x < game.pixelSize || snake.y < game.pixelSize) {
       game.over = true;
@@ -104,26 +126,26 @@ snake = {
 
 }
 
-food = {
-  x: null,
-  y: null,
+var food = {
+  xPos: null,
+  yPos: null,
   set: function (){
-    food.x = Math.ceil(Math.random()*(40))*game.pixelSize - game.pixelSize / 2;
-    food.y = Math.ceil(Math.random()*(40))*game.pixelSize - game.pixelSize / 2;
+    food.xPos = Math.ceil(Math.random()*(40))*game.pixelSize - game.pixelSize / 2;
+    food.yPos = Math.ceil(Math.random()*(40))*game.pixelSize - game.pixelSize / 2;
   },
   draw: function () {
-    game.drawBox(food.x, food.y);
+    game.drawBox(food.xPos, food.yPos);
   }
 }
 
-inverseDirection = {
+var inverseDirection = {
   'up': 'down',
   'left': 'right',
   'right' : 'left',
   'down': 'up'
 }
 
-keys = {
+var keys = {
   up: [38, 75, 87],
   down: [40, 74, 83],
   left: [37, 65, 72],
@@ -140,18 +162,22 @@ keys = {
 }
 
 addEventListener('keydown', function (e){
-  var lastKey = keys.getKey(e.keyCode);
-  if (['up', 'down', 'left', 'right'].indexOf(lastKey) >= 0 &&
+  if (game.directionFlag === false){
+    game.directionFlag = true;
+    var lastKey = keys.getKey(e.keyCode);
+    if (['up', 'down', 'left', 'right'].indexOf(lastKey) >= 0 &&
     lastKey != inverseDirection[snake.direction]) {
       snake.direction = lastKey;
     } else if ( ['start_game'].indexOf(lastKey) >= 0 && game.over) {
       game.start();
     }
+  }
 }, false );
 
 var requestAnimationFrame = window.requestAnimationFrame;
 function loop () {
   if(game.over === false){
+    game.directionFlag = false;
     game.resetCanvas();
     food.draw();
     snake.move();
