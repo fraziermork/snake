@@ -29,19 +29,23 @@ var game = {
   },
 
   start: function(){
+    console.log('game.start function begun');
     //set initial flag values
     game.resetCanvas();
     food.set();
     snake.direction = 'left';
     snake.init();
     game.over = false;
+    console.log('game.start function done');
   },
 
   resetCanvas: function() {
+    console.log('game.resetCanvas');
     context.clearRect(0,0, snakeCanvas.height, snakeCanvas.width);
   },
 
   stop: function() {
+    console.log('game.stop');
     game.over = true;
   }
 }
@@ -53,18 +57,21 @@ var snake = {
   direction: 'left',
 
   init: function(){
+    snake.direction = 'left';
+    console.log('snake.init begun');
     snake.sections = [];
     console.table(snake.sections);
     console.log((snake.sections).toString());
     snake.y = (snakeCanvas.height/2) +(game.pixelSize/2);
     console.log(snake.y);
-    snake.x = (snakeCanvas.width/2) - (game.pixelSize/2);
+    snake.x = (snakeCanvas.width/2) + (game.pixelSize/2) + 5*(game.pixelSize);
     console.log(snake.x);
+    //this for loop is drawing the snake the wrong direction I think
     for (var i = 0; i < 5; i++){
-      snake.x += (game.pixelSize);
+      snake.x -= (game.pixelSize);
       console.log('in init snake x');
       console.log(snake.x);
-      snake.sections.push([snake.x, snake.y]);
+      snake.sections.push([snake.x, snake.y]); //was push
       console.table(snake.sections);
       console.dir(snake.sections);
       console.log(snake.sections);
@@ -74,9 +81,11 @@ var snake = {
     console.log('Init sections are:');
     console.table(snake.sections);
     console.log(snake.sections);
+    console.log('snake.init finished');
   },
 
   move: function(){
+    console.log('snake.move begun');
     switch(snake.direction){
       case 'up':
         snake.y -= game.pixelSize;
@@ -91,37 +100,43 @@ var snake = {
         snake.x += game.pixelSize;
         break;
     }
-    // console.log(snake.x + ' ' + snake.y);
+    console.log('in snake.move, snake x and snake y are');
+    console.log(snake.x + ' ' + snake.y);
     snake.checkCollision();
     snake.checkGrowth();
     snake.sections.push([snake.x, snake.y]);
-    // console.log('Move snake sections are:' );
-    // console.log(snake.sections);
+    console.log('snake.move snake sections are:' );
+    console.table(snake.sections);
+    console.log('snake.move finished');
   },
 
   draw: function(){
+    console.log('snake.draw begun');
     for (var i = 0; i < snake.sections.length; i++){
-      // console.log('Draw snake sections are');
-      // console.log(snake.sections);
       game.drawBox(snake.sections[i][0], snake.sections[i][1])
     }
+    console.log('snake.draw finished');
   },
 
   checkCollision: function(){
-    // console.log('isInArray ' + isInArray([snake.x, snake.y], snake.sections));
+    console.log('snake.checkCollision begun');
+    console.log('isInArray ' + isInArray([snake.x, snake.y], snake.sections));
     if (snake.x > snakeCanvas.width|| snake.y > snakeCanvas.height ||
-    snake.x < game.pixelSize || snake.y < game.pixelSize) {
+    snake.x < game.pixelSize || snake.y < game.pixelSize || isInArray([snake.x, snake.y], snake.sections)) {
       game.over = true;
     }
+    console.log('snake.checkCollision finished');
   },
 
   checkGrowth : function () {
-    if (snake.x === food.x && snake.y === food.y) {
+    console.log('snake.checkGrowth begun');
+    if (snake.x === food.xPos && snake.y === food.yPos) {
       game.score++;
       food.set();
     } else {
       snake.sections.shift();
     }
+    console.log('snake.checkGrowth finished');
   }
 
 }
@@ -188,3 +203,6 @@ function loop () {
   }, 1000 / game.fps);
 }
 requestAnimationFrame(loop);
+
+
+//snake is turning around in the first game two animation frames, need to redraw the snake going the opposite direction?
